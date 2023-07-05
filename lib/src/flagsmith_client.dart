@@ -43,7 +43,8 @@ class FlagsmithClient {
   Dio get client => _api;
   bool flagsmithDebug = false;
 
-  FlagsmithClient({this.config = const FlagsmithConfig(), required this.apiKey, this.seeds = const <Flag>[], this.storage}) {
+  FlagsmithClient(
+      {this.config = const FlagsmithConfig(), required this.apiKey, this.seeds = const <Flag>[], this.storage}) {
     flagsmithDebug = config.isDebug;
     _api = _apiClient();
     storageProvider = prepareStorage(storage: storage, config: config);
@@ -185,8 +186,7 @@ class FlagsmithClient {
   /// [user] an identifier for the user
   /// [reload] force reload from API
   /// Returns true if feature flag exist and enabled, false otherwise
-  Future<bool> hasFeatureFlag(String featureName,
-      {Identity? user, bool? reload}) async {
+  Future<bool> hasFeatureFlag(String featureName, {Identity? user, bool? reload}) async {
     var flag = await _getFlagByName(featureName, user: user, reload: reload);
     return flag != null;
   }
@@ -215,8 +215,7 @@ class FlagsmithClient {
   /// [user] an identifier for the user
   /// [reload] force reload from API
   /// Returns true if feature flag exist and enabled, null otherwise
-  Future<bool> isFeatureFlagEnabled(String featureName,
-      {Identity? user, bool? reload}) async {
+  Future<bool> isFeatureFlagEnabled(String featureName, {Identity? user, bool? reload}) async {
     var flag = await _getFlagByName(featureName, user: user, reload: reload);
     return flag?.enabled ?? false;
   }
@@ -225,17 +224,14 @@ class FlagsmithClient {
   ///
   /// [reload] force reload from API
   /// Returns String value of Feature Flag
-  Future<String?> getFeatureFlagValue(String featureId,
-      {Identity? user, bool? reload}) async {
+  Future<String?> getFeatureFlagValue(String featureId, {Identity? user, bool? reload}) async {
     var flag = await _getFlagByName(featureId, user: user, reload: reload);
     return flag?.stateValue;
   }
 
-  Future<Flag?> _getFlagByName(String featureName,
-      {Identity? user, bool? reload}) async {
+  Future<Flag?> _getFlagByName(String featureName, {Identity? user, bool? reload}) async {
     var flags = await getFeatureFlags(user: user, reload: reload ?? false);
-    var flag = flags
-        .firstWhereOrNull((element) => element.feature.name == featureName);
+    var flag = flags.firstWhereOrNull((element) => element.feature.name == featureName);
     _incrementFlagAnalytics(flag);
     return flag;
   }
@@ -410,7 +406,7 @@ class FlagsmithClient {
           .map((e) => TraitWithIdentity(
                 identity: Identity(identifier: identifier),
                 key: e['trait_key'] as String,
-                value: e['trait_value'],
+                value: e['trait_value'].toString(),
               ))
           .toList();
     } on DioError catch (e) {
