@@ -410,7 +410,7 @@ class FlagsmithClient {
           .map((e) => TraitWithIdentity(
                 identity: Identity(identifier: identifier),
                 key: e['trait_key'] as String,
-                value: e['trait_value'] as String,
+                value: e['trait_value'],
               ))
           .toList();
     } on DioError catch (e) {
